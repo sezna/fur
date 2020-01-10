@@ -7,7 +7,7 @@ description = "A gopher client and browser."
 license = "GPL v3.0"
 repository = "https://github.com/sezna/fur"
 documentation = "docs.rs/fur"
-homepage = "alex-hansen.com"
+homepage = "https://alex-hansen.com"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
