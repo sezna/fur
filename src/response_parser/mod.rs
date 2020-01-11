@@ -16,10 +16,3 @@ pub use gopher_parse_error::GopherParseError;
 pub use gopher_response::GopherResponse;
 pub use item_type::ItemType;
 pub use text_file::TextFile;
-
-pub fn parse(input: &str, item_type: &ItemType) -> Result<impl GopherResponse, GopherParseError> {
-    match item_type {
-        ItemType::GopherMap => GopherMap::from_str(input),
-        _ => Err(GopherParseError {}),
-    }
-}

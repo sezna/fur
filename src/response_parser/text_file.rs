@@ -1,14 +1,18 @@
 use super::{GopherParseError, GopherResponse};
 
-pub struct TextFile;
+pub struct TextFile {
+    contents: String,
+}
 
 impl GopherResponse for TextFile {
     const ItemType: char = '0';
     fn from_str(input: &str) -> Result<Self, GopherParseError> {
-        return Ok(TextFile {}); // TODO
+        return Ok(TextFile {
+            contents: input.to_string(),
+        }); // TODO
     }
     fn render(&self) -> String {
-        "Unimplemented: Text File render".to_string()
+        self.contents.clone()
     }
 }
 

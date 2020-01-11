@@ -3,6 +3,7 @@ pub enum ItemType {
     TextFile,
     GopherMap,
     Nameserver,
+    Binary,
     Information, // ... etc
 }
 
@@ -13,6 +14,7 @@ impl ItemType {
             ItemType::GopherMap => "MENU",
             ItemType::Nameserver => "NAME",
             ItemType::Information => "INFO",
+            ItemType::Binary => " BIN",
         }
         .to_string()
     }
