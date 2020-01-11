@@ -19,7 +19,7 @@ async fn main() {
     //    println!("Received: \n{}", buf);
     println!("parsing...");
     let parsed_message = response_parser::parse(&buf, ItemType::Submenu);
-    println!("{}", parsed_message.unwrap().to_string());
+    println!("{}", parsed_message.unwrap().peruse());
     // Following snippets come here...
 }
 

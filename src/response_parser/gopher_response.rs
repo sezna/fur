@@ -3,7 +3,6 @@ use super::GopherParseError;
 pub trait GopherResponse
 where
     Self: std::marker::Sized,
-    Self: std::fmt::Display,
 {
     /// The item type of this gopher response. See [wiki](https://en.wikipedia.org/wiki/Gopher_(protocol)#Item_types) for details.
     const ItemType: char;

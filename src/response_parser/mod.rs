@@ -17,7 +17,7 @@ pub use item_type::ItemType;
 pub use submenu::Submenu;
 pub use text_file::TextFile;
 
-pub fn parse(input: &str, item_type: ItemType) -> Result<impl GopherResponse, GopherParseError> {
+pub fn parse(input: &str, item_type: ItemType) -> Result<Submenu, GopherParseError> {
     match item_type {
         ItemType::Submenu => Submenu::from_str(input),
         _ => Err(GopherParseError {}),
