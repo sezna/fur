@@ -1,6 +1,8 @@
 use tokio::net::TcpStream;
 use tokio::prelude::*;
 
+mod response_parser;
+
 #[tokio::main]
 async fn main() {
     // Connect to port 6142 on localhost
@@ -14,11 +16,10 @@ async fn main() {
     stream.read_to_string(&mut buf).await;
 
     println!("Received: \n{}", buf);
+    println!("parsing...");
+    let parsed_message = response_parser::parse(&buf);
     // Following snippets come here...
 }
-
-
-
 
 fn get_user_input() -> String {
     let mut buffer = String::new();
