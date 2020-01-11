@@ -7,6 +7,9 @@ impl GopherResponse for TextFile {
     fn from_str(input: &str) -> Result<Self, GopherParseError> {
         return Ok(TextFile {}); // TODO
     }
+    fn render(&self) -> String {
+        "Unimplemented: Text File render".to_string()
+    }
 }
 
 impl std::fmt::Display for TextFile {
