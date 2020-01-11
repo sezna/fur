@@ -1,4 +1,3 @@
-struct GopherSubmenu;
 /*
 struct Nameserver;
 struct ErrorCode;
@@ -9,11 +8,18 @@ struct DOSBinHex;
 
 mod gopher_parse_error;
 mod gopher_response;
+mod item_type;
+mod submenu;
 mod text_file;
 pub use gopher_parse_error::GopherParseError;
 pub use gopher_response::GopherResponse;
+pub use item_type::ItemType;
+pub use submenu::Submenu;
 pub use text_file::TextFile;
 
-pub fn parse(input: &str) -> Result<impl GopherResponse, GopherParseError> {
-    return TextFile::from_str(" ");
+pub fn parse(input: &str, item_type: ItemType) -> Result<impl GopherResponse, GopherParseError> {
+    match item_type {
+        ItemType::Submenu => Submenu::from_str(input),
+        _ => Err(GopherParseError {}),
+    }
 }

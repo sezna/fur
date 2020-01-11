@@ -2,6 +2,7 @@ use tokio::net::TcpStream;
 use tokio::prelude::*;
 
 mod response_parser;
+use response_parser::ItemType;
 
 #[tokio::main]
 async fn main() {
@@ -15,9 +16,10 @@ async fn main() {
     let mut buf = String::new();
     stream.read_to_string(&mut buf).await;
 
-    println!("Received: \n{}", buf);
+    //    println!("Received: \n{}", buf);
     println!("parsing...");
-    let parsed_message = response_parser::parse(&buf);
+    let parsed_message = response_parser::parse(&buf, ItemType::Submenu);
+    println!("{}", parsed_message.unwrap().to_string());
     // Following snippets come here...
 }
 
