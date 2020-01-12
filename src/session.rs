@@ -36,13 +36,13 @@ impl Session {
     pub async fn connect(&mut self) {
         let mut stream = TcpStream::connect(&format!("{}:{}", self.hostname, self.port))
             .await
-            .unwrap();
+            .expect("failed to connect to stream");
         stream
             .write(format!("{}", self.selector).as_bytes())
             .await
-            .unwrap();
+            .expect("failed to write to stream");
         let mut buf = String::new();
-        let byte_count = stream.read_to_string(&mut buf).await.unwrap();
+        let byte_count = stream.read_to_string(&mut buf).await.expect("Failed to read from stream");
         println!(
             "Read {} bytes from {}:{}",
             byte_count, self.hostname, self.port
@@ -50,7 +50,8 @@ impl Session {
         stream
             .shutdown(std::net::Shutdown::Both)
             .expect("failed to end tcp stream");
-        self.options = GopherMap::from_str(&buf).unwrap();
+        // TODO this needs to switch depending on the item type, not just work on every page.
+        self.options = GopherMap::from_str(&buf).expect("failed to parse menu");
     }
 
     pub async fn browse_to(
@@ -109,6 +110,6 @@ impl Session {
             new_selection.item_type.clone(),
         )
         .await
-        .unwrap();
+        .expect("failed to browse");
     }
 }

@@ -14,7 +14,7 @@ impl GopherMap {
     }
     /// Given an option selection, return the corresponding menu item.
     pub fn select_option(&self, selection: usize) -> &MenuItem {
-        self.options.get(&selection).unwrap()
+        self.options.get(&selection).expect("Failed to select option")
     }
 }
 
@@ -29,25 +29,37 @@ impl GopherResponse for GopherMap {
                 .map(|x| x.to_string())
                 .collect::<Vec<String>>();
             let mut item_iter = entries[0].chars();
-            let first_letter = item_iter.next().unwrap();
-            let item_type = lookup_item_type(&first_letter)
-                .expect(&format!("unimpl'd item type: {}", first_letter));
-            entries[0] = item_iter.collect::<String>();
-            let item = MenuItem {
-                item_type,
-                display_string: entries[0].clone(),
-                selector: entries[1].clone(),
-                hostname: entries[2].clone(),
-                port: str::parse::<usize>(entries[3].as_str()).expect("failed to parse port"),
-            };
-            match item.item_type {
-                ItemType::Information => (),
-                _ => {
-                    to_return.options.insert(counter, item.clone());
-                    counter += 1;
-                }
-            };
-            to_return.menu_items.push(item);
+            if entries[0].chars().collect::<Vec<char>>().len() == 0 {
+                println!("null entry {}", input);
+            }
+            let first_letter = item_iter.next().expect("Entry has zero letters");
+            let item_type = lookup_item_type(&first_letter);
+            if item_type == ItemType::Unknown {
+                to_return.menu_items.push(MenuItem {
+                    item_type,
+                    display_string: input.to_string(),
+                    selector: String::new(),
+                    hostname: String::new(),
+                    port: 0usize,
+                });
+            } else {
+                entries[0] = item_iter.collect::<String>();
+                let item = MenuItem {
+                    item_type,
+                    display_string: entries[0].clone(),
+                    selector: entries[1].clone(),
+                    hostname: entries[2].clone(),
+                    port: str::parse::<usize>(entries[3].as_str()).expect("failed to parse port"),
+                };
+                match item.item_type {
+                    ItemType::Information => (),
+                    _ => {
+                        to_return.options.insert(counter, item.clone());
+                        counter += 1;
+                    }
+                };
+                to_return.menu_items.push(item);
+            }
         }
         Ok(to_return)
     }
@@ -84,16 +96,18 @@ impl GopherResponse for GopherMap {
     }
 }
 
-fn lookup_item_type(code: &char) -> Option<ItemType> {
-    Some(match code {
+fn lookup_item_type(code: &char) -> ItemType {
+    match code {
         '0' => ItemType::TextFile,
         '1' => ItemType::GopherMap,
         '2' => ItemType::Nameserver,
         '3' => ItemType::Error,
+        '4' => ItemType::MacBinary,
         '9' => ItemType::Binary,
         'i' => ItemType::Information,
-        _ => return None,
-    })
+        'I' => ItemType::Image,
+        _ => return ItemType::Unknown,
+    }
 }
 
 #[derive(Clone)]

@@ -1,10 +1,13 @@
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub enum ItemType {
     TextFile,
     GopherMap,
     Nameserver,
     Binary,
     Error,
+    Image,
+    MacBinary,
+    Unknown,
     Information, // ... etc
 }
 
@@ -16,7 +19,10 @@ impl ItemType {
             ItemType::Nameserver => "NAME",
             ItemType::Information => "INFO",
             ItemType::Binary => " BIN",
+            ItemType::MacBinary => "MBIN",
             ItemType::Error => " ERR",
+            ItemType::Image => "IMAG",
+            ItemType::Unknown => "UNKN",
         }
         .to_string()
     }
