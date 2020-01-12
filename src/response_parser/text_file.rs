@@ -5,7 +5,7 @@ pub struct TextFile {
 }
 
 impl GopherResponse for TextFile {
-    const ItemType: char = '0';
+    const ITEM_TYPE: char = '0';
     fn from_str(input: &str) -> Result<Self, GopherParseError> {
         return Ok(TextFile {
             contents: input.to_string(),

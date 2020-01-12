@@ -1,4 +1,4 @@
-use crate::response_parser::{self, GopherMap, GopherParseError, GopherResponse, ItemType};
+use crate::response_parser::{GopherMap, GopherParseError, GopherResponse, ItemType};
 use tokio::net::TcpStream;
 use tokio::prelude::*;
 /// Represents a browsing session, complete with history.

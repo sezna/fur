@@ -19,7 +19,7 @@ impl GopherMap {
 }
 
 impl GopherResponse for GopherMap {
-    const ItemType: char = '1';
+    const ITEM_TYPE: char = '1';
     fn from_str(input: &str) -> Result<Self, GopherParseError> {
         let mut to_return = GopherMap::new();
         let mut counter = 0usize;

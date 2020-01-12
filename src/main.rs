@@ -1,9 +1,6 @@
-use tokio::net::TcpStream;
-use tokio::prelude::*;
 
 mod response_parser;
 mod session;
-use response_parser::{GopherResponse, ItemType};
 use session::Session;
 
 #[tokio::main]
