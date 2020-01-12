@@ -7,6 +7,8 @@ use tokio::prelude::*;
 pub struct Session {
     /// The current location of the browser
     selector: String,
+    /// Stack of addresses that have been visited (hostname, port, selector)
+    history: Vec<(String, usize, String)>,
     /// The most recent [GopherMap].
     options: GopherMap,
     /// The current hostname
@@ -19,6 +21,7 @@ impl Session {
     pub async fn new(hostname: &str, port: usize) -> Session {
         let mut sess = Session {
             selector: "\n".to_string(),
+            history: Vec::new(),
             options: GopherMap::new(),
             hostname: hostname.to_string(),
             port,
@@ -64,6 +67,8 @@ impl Session {
             selector,
             item_type.to_string()
         );
+        self.history
+            .push((self.hostname.clone(), self.port, self.selector.clone()));
         self.hostname = hostname;
         self.port = port;
         self.selector = format!("{}\n", selector);
@@ -74,6 +79,20 @@ impl Session {
         println!("Your options are:");
         self.options.render()
     }
+    pub async fn go_back(&mut self) {
+        let (hostname, port, selector) = if let Some(stuff) = self.history.pop() {
+            stuff
+        } else {
+            println!("Cannot go back in empty history.");
+            return;
+        };
+        self.hostname = hostname;
+        self.port = port;
+        self.selector = selector;
+        self.connect().await;
+        return;
+    }
+
     pub async fn select_option(&mut self, selection: usize) {
         let new_selection = self.options.select_option(selection);
         println!(

@@ -8,13 +8,22 @@ use session::Session;
 
 #[tokio::main]
 async fn main() {
-    // Connect to port 6142 on localhost
     let mut session = Session::new("gopher.quux.org", 70usize).await;
     loop {
         println!("{}", session.show_options());
-        println!("Where would you like to browse to?");
-        let input = get_user_input();
-        let selection = str::parse::<usize>(&input.trim()).unwrap();
+        let selection = loop {
+            println!("Where would you like to browse to?");
+            let input = get_user_input();
+            if input.trim() == "back".to_string() {
+                session.go_back().await;
+                println!("{}", session.show_options());
+            } else {
+                if let Ok(selection) = str::parse::<usize>(&input.trim()) {
+                    break selection;
+                }
+                println!("Invalid entry.");
+            }
+        };
         session.select_option(selection).await;
     }
 }

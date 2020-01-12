@@ -21,7 +21,6 @@ impl GopherMap {
 impl GopherResponse for GopherMap {
     const ItemType: char = '1';
     fn from_str(input: &str) -> Result<Self, GopherParseError> {
-        println!("DEBUG: Raw input: \n{}", input);
         let mut to_return = GopherMap::new();
         let mut counter = 0usize;
         for line in input.lines() {
@@ -31,7 +30,8 @@ impl GopherResponse for GopherMap {
                 .collect::<Vec<String>>();
             let mut item_iter = entries[0].chars();
             let first_letter = item_iter.next().unwrap();
-            let item_type = lookup_item_type(&first_letter).expect("unimpl'd item type");
+            let item_type = lookup_item_type(&first_letter)
+                .expect(&format!("unimpl'd item type: {}", first_letter));
             entries[0] = item_iter.collect::<String>();
             let item = MenuItem {
                 item_type,
@@ -56,6 +56,11 @@ impl GopherResponse for GopherMap {
         let mut counter = 0;
         for item in self.menu_items.iter() {
             match item.item_type {
+                ItemType::Error => output_strings.push(format!(
+                    "{}: {}",
+                    item.item_type.to_string(),
+                    item.display_string
+                )),
                 ItemType::Information => output_strings.push(format!(
                     "     {}: {}",
                     item.item_type.to_string(),
@@ -84,6 +89,7 @@ fn lookup_item_type(code: &char) -> Option<ItemType> {
         '0' => ItemType::TextFile,
         '1' => ItemType::GopherMap,
         '2' => ItemType::Nameserver,
+        '3' => ItemType::Error,
         '9' => ItemType::Binary,
         'i' => ItemType::Information,
         _ => return None,

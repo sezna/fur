@@ -4,6 +4,7 @@ pub enum ItemType {
     GopherMap,
     Nameserver,
     Binary,
+    Error,
     Information, // ... etc
 }
 
@@ -15,6 +16,7 @@ impl ItemType {
             ItemType::Nameserver => "NAME",
             ItemType::Information => "INFO",
             ItemType::Binary => " BIN",
+            ItemType::Error => " ERR",
         }
         .to_string()
     }
