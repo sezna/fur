@@ -1,4 +1,4 @@
-use super::{GopherParseError, GopherResponse, ItemType};
+use super::{item_type::lookup_item_type, GopherParseError, GopherResponse, ItemType};
 use std::collections::HashMap;
 
 pub struct GopherMap {
@@ -14,7 +14,9 @@ impl GopherMap {
     }
     /// Given an option selection, return the corresponding menu item.
     pub fn select_option(&self, selection: usize) -> &MenuItem {
-        self.options.get(&selection).expect("Failed to select option")
+        self.options
+            .get(&selection)
+            .expect("Failed to select option")
     }
 }
 
@@ -37,7 +39,7 @@ impl GopherResponse for GopherMap {
             if item_type == ItemType::Unknown {
                 to_return.menu_items.push(MenuItem {
                     item_type,
-                    display_string: input.to_string(),
+                    display_string: line.to_string(),
                     selector: String::new(),
                     hostname: String::new(),
                     port: 0usize,
@@ -93,20 +95,6 @@ impl GopherResponse for GopherMap {
             "===========================================================\n{}",
             output_strings.join("\n")
         )
-    }
-}
-
-fn lookup_item_type(code: &char) -> ItemType {
-    match code {
-        '0' => ItemType::TextFile,
-        '1' => ItemType::GopherMap,
-        '2' => ItemType::Nameserver,
-        '3' => ItemType::Error,
-        '4' => ItemType::MacBinary,
-        '9' => ItemType::Binary,
-        'i' => ItemType::Information,
-        'I' => ItemType::Image,
-        _ => return ItemType::Unknown,
     }
 }
 

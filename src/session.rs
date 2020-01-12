@@ -42,7 +42,10 @@ impl Session {
             .await
             .expect("failed to write to stream");
         let mut buf = String::new();
-        let byte_count = stream.read_to_string(&mut buf).await.expect("Failed to read from stream");
+        let byte_count = stream
+            .read_to_string(&mut buf)
+            .await
+            .expect("Failed to read from stream");
         println!(
             "Read {} bytes from {}:{}",
             byte_count, self.hostname, self.port
@@ -61,13 +64,6 @@ impl Session {
         selector: String,
         item_type: ItemType,
     ) -> Result<(), GopherParseError> {
-        println!(
-            "Browsing to {}:{}{} ({})",
-            hostname,
-            port,
-            selector,
-            item_type.to_string()
-        );
         self.history
             .push((self.hostname.clone(), self.port, self.selector.clone()));
         self.hostname = hostname;

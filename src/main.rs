@@ -1,4 +1,3 @@
-
 mod response_parser;
 mod session;
 use session::Session;
